@@ -1,6 +1,6 @@
 package cn.davidma.tinymobfarm.core;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -27,25 +27,14 @@ public enum EnumMobFarm {
 	private Material material;
 	private float hardness;
 	private boolean canFarmHostile;
-	private int[] damageChance;
-	private Map<Integer, Integer> normalizedChance;
+	private int[] defaultDamageChance;
 	
 	private EnumMobFarm(String registryName, Material material, float hardness, boolean canFarmHostile, int[] damageChance) {
 		this.registryName = registryName;
 		this.material = material;
 		this.hardness = hardness;
 		this.canFarmHostile = canFarmHostile;
-		this.damageChance = damageChance;
-		
-		this.normalizedChance = new HashMap<Integer, Integer>();
-		for (int i: this.damageChance) {
-			if (!this.normalizedChance.containsKey(i)) this.normalizedChance.put(i, 0);
-			this.normalizedChance.put(i, this.normalizedChance.get(i) + 1);
-		}
-		int denominator = this.damageChance.length;
-		for (int i: this.normalizedChance.keySet()) {
-			this.normalizedChance.put(i, (int) (this.normalizedChance.get(i) * 100.0 / denominator));
-		}
+		this.defaultDamageChance = damageChance;
 	}
 	
 	public String getRegistryName() {
@@ -81,7 +70,13 @@ public enum EnumMobFarm {
 	}
 	
 	public int getRandomDamage(Random rand) {
-		return this.damageChance[rand.nextInt(this.damageChance.length)];
+		Map<Integer, Integer> damageChance = this.getDamageChance();
+		int roll = rand.nextInt(this.getTotalChance(damageChance));
+		for (Map.Entry<Integer, Integer> entry: damageChance.entrySet()) {
+			roll -= entry.getValue();
+			if (roll < 0) return entry.getKey();
+		}
+		return 0;
 	}
 	
 	public void addTooltip(List<String> tooltip, boolean mechanical) {
@@ -93,9 +88,43 @@ public enum EnumMobFarm {
 		}
 		tooltip.add(I18n.format("tinymobfarm.tooltip.farm_rate", ConfigTinyMobFarm.MOB_FARM_SPEED[this.ordinal()]));
 		tooltip.add(I18n.format("tinymobfarm.tooltip.durability_info"));
-		for (int i: this.normalizedChance.keySet()) {
-			if (i == 0) tooltip.add(I18n.format("tinymobfarm.tooltip.no_durability", this.normalizedChance.get(i)));
-			else tooltip.add(I18n.format("tinymobfarm.tooltip.default_durability", this.normalizedChance.get(i), i));
+		Map<Integer, Integer> damageChance = this.getDamageChance();
+		int totalChance = this.getTotalChance(damageChance);
+		for (Map.Entry<Integer, Integer> entry: damageChance.entrySet()) {
+			int chance = (int) (entry.getValue() * 100.0 / totalChance);
+			if (entry.getKey() == 0) tooltip.add(I18n.format("tinymobfarm.tooltip.no_durability", chance));
+			else tooltip.add(I18n.format("tinymobfarm.tooltip.default_durability", chance, entry.getKey()));
 		}
+	}
+
+	private Map<Integer, Integer> getDamageChance() {
+		Map<Integer, Integer> damageChance = new LinkedHashMap<Integer, Integer>();
+		if (this.ordinal() < ConfigTinyMobFarm.LASSO_DURABILITY_DAMAGE.length) {
+			String config = ConfigTinyMobFarm.LASSO_DURABILITY_DAMAGE[this.ordinal()];
+			try {
+				for (String entry: config.split(",")) {
+					String[] parts = entry.trim().split("=", 2);
+					int damage = Integer.parseInt(parts[0].trim());
+					int chance = Integer.parseInt(parts[1].trim());
+					if (damage < 0 || chance <= 0) throw new IllegalArgumentException();
+					damageChance.put(damage, chance);
+				}
+				if (!damageChance.isEmpty()) return damageChance;
+			} catch (RuntimeException ignored) {
+				// Fall back to the built-in defaults when a config entry is invalid.
+			}
+		}
+
+		damageChance.clear();
+		for (int damage: this.defaultDamageChance) {
+			damageChance.put(damage, damageChance.containsKey(damage) ? damageChance.get(damage) + 1 : 1);
+		}
+		return damageChance;
+	}
+
+	private int getTotalChance(Map<Integer, Integer> damageChance) {
+		int totalChance = 0;
+		for (int chance: damageChance.values()) totalChance += chance;
+		return Math.max(1, totalChance);
 	}
 }

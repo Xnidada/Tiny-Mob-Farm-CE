@@ -25,6 +25,19 @@ public class ConfigTinyMobFarm {
 	@Name("Lasso Capture Health Limit")
 	@Comment({"套索捕捉生物时，生物当前生命值必须小于等于此值。默认 5。", "When capturing a mob, its current health must be less than or equal to this value. Default: 5."})
 	public static double LASSO_CAPTURE_HEALTH_LIMIT = 5.0;
+
+	@Name("Lasso Durability Damage")
+	@Comment({"各等级农场每轮产出消耗的套索耐久配置，顺序为木、石、铁、金、钻石、绿宝石、炼狱、终极；格式为“耐久点数=概率”，多个结果用逗号分隔。", "Lasso durability damage per production cycle for wood, stone, iron, gold, diamond, emerald, infernal, and ultimate farms; format: damage=chance, separated by commas."})
+	public static String[] LASSO_DURABILITY_DAMAGE = {
+		"2=33,3=67",
+		"1=33,2=34,3=33",
+		"1=50,2=50",
+		"1=67,2=33",
+		"1=100",
+		"0=33,1=67",
+		"0=67,1=33",
+		"0=100"
+	};
 	
 	@Name("Mob Farm Rate")
 	@Comment({"每个等级农场生成一次掉落所需的秒数。", "Seconds required for each farm tier to generate loot once."})
