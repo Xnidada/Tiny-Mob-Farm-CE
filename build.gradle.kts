@@ -1,10 +1,10 @@
 plugins {
     id("java")
-    id("com.gtnewhorizons.retrofuturagradle") version "1.4.1"
+    id("com.gtnewhorizons.retrofuturagradle") version "2.0.3"
 }
 
 group = "cn.davidma.tinymobfarm"
-version = "1.0.9-beta"
+version = "1.0.91-beta"
 
 base {
     archivesName.set("TinyMobFarm-CE")

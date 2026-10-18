@@ -23,12 +23,13 @@ itemGroup.tinymobfarm=Tiny Mob Farm CE
 
 tinymobfarm.error.cannot_capture_boss=Этот моб в черном списке
 tinymobfarm.error.blacklisted_mob=Этот моб в черном списке
+tinymobfarm.error.max_health_too_high=Максимальное здоровье моба должно быть ниже %s для поимки.
+tinymobfarm.error.health_too_high=Текущее здоровье моба должно быть снижено до %s или ниже перед поимкой.
 
 tinymobfarm.gui.higher_tier=Этому существу нужен более высокий уровень фермы.
 tinymobfarm.gui.redstone_disable=Отключено сигналом редстоуна.
 tinymobfarm.gui.no_lasso=Разместите лассо, чтобы активировать
 
-tinymobfarm.tooltip.release_mob=Щелкните ПКМ по блоку, чтобы освободить моба.
 tinymobfarm.tooltip.mob_name=Моб: %s
 tinymobfarm.tooltip.health=Здоровье: %d/%d
 tinymobfarm.tooltip.hostile=Моб враждебен

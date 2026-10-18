@@ -23,12 +23,13 @@ itemGroup.tinymobfarm=微型刷怪场社区版
 
 tinymobfarm.error.cannot_capture_boss=无法捕捉 Boss 生物。
 tinymobfarm.error.blacklisted_mob=该生物在黑名单中。
+tinymobfarm.error.max_health_too_high=该生物最大生命值必须低于 %s 才能捕捉。
+tinymobfarm.error.health_too_high=该生物当前生命值必须降至 %s 以下才能捕捉。
 
 tinymobfarm.gui.higher_tier=该生物需要更高等级的刷怪场。
 tinymobfarm.gui.redstone_disable=已被红石信号禁用。
 tinymobfarm.gui.no_lasso=放入已捕捉生物的套索以启动。
 
-tinymobfarm.tooltip.release_mob=对方块右键以释放生物。
 tinymobfarm.tooltip.mob_name=生物：%s
 tinymobfarm.tooltip.health=生命值：%d/%d
 tinymobfarm.tooltip.hostile=该生物为敌对生物。

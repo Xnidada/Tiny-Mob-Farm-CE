@@ -14,12 +14,13 @@ itemGroup.tinymobfarm=Tiny Mob Farm CE
 
 tinymobfarm.error.cannot_capture_boss=Cannot capture boss mobs.
 tinymobfarm.error.blacklisted_mob=This mob is blacklisted.
+tinymobfarm.error.max_health_too_high=This mob's maximum health must be below %s to capture.
+tinymobfarm.error.health_too_high=This mob's current health must be reduced to %s or less before capture.
 
 tinymobfarm.gui.higher_tier=This mob needs higher farm tiers.
 tinymobfarm.gui.redstone_disable=Disabled by redstone.
 tinymobfarm.gui.no_lasso=Insert a lasso to activate.
 
-tinymobfarm.tooltip.release_mob=Right click on block to release mob.
 tinymobfarm.tooltip.mob_name=Mob: %s
 tinymobfarm.tooltip.health=Health: %d/%d
 tinymobfarm.tooltip.hostile=Mob is hostile.

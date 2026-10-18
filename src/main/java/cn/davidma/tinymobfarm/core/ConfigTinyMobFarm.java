@@ -17,6 +17,14 @@ public class ConfigTinyMobFarm {
 	@Name("Lasso Durability")
 	@Comment({"套索的耐久度。", "Durability of the lasso."})
 	public static int LASSO_DURABILITY = 256;
+
+	@Name("Lasso Maximum Mob Health")
+	@Comment({"生物最大生命值大于等于此值时无法被套索捕捉。默认 50。", "Mobs with maximum health greater than or equal to this value cannot be captured by a lasso. Default: 50."})
+	public static double LASSO_MAX_MOB_HEALTH = 50.0;
+
+	@Name("Lasso Capture Health Limit")
+	@Comment({"套索捕捉生物时，生物当前生命值必须小于等于此值。默认 5。", "When capturing a mob, its current health must be less than or equal to this value. Default: 5."})
+	public static double LASSO_CAPTURE_HEALTH_LIMIT = 5.0;
 	
 	@Name("Mob Farm Rate")
 	@Comment({"每个等级农场生成一次掉落所需的秒数。", "Seconds required for each farm tier to generate loot once."})
