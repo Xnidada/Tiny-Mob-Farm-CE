@@ -29,6 +29,8 @@ tinymobfarm.error.health_too_high=该生物当前生命值必须降至 %s 以下
 tinymobfarm.gui.higher_tier=该生物需要更高等级的刷怪场。
 tinymobfarm.gui.redstone_disable=已被红石信号禁用。
 tinymobfarm.gui.no_lasso=放入已捕捉生物的套索以启动。
+tinymobfarm.gui.collect_experience=收集经验值
+tinymobfarm.gui.experience_storage=经验值：%d/%d
 
 tinymobfarm.tooltip.mob_name=生物：%s
 tinymobfarm.tooltip.health=生命值：%d/%d

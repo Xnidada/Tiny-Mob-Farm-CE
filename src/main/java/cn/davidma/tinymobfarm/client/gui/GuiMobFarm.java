@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.davidma.tinymobfarm.common.tileentity.TileEntityMobFarm;
+import cn.davidma.tinymobfarm.common.TinyMobFarm;
+import cn.davidma.tinymobfarm.common.network.CollectExperienceMessage;
+import cn.davidma.tinymobfarm.core.ConfigTinyMobFarm;
 import cn.davidma.tinymobfarm.core.Reference;
 
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
@@ -17,6 +21,7 @@ public class GuiMobFarm extends GuiContainer {
 	private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID + ":textures/gui/farm_gui.png");
 	
 	private TileEntityMobFarm tileEntityMobFarm;
+	private GuiButton collectExperienceButton;
 	
 	public GuiMobFarm(InventoryPlayer playerInv, TileEntityMobFarm tileEntityMobFarm) {
 		super(new ContainerMobFarm(playerInv, tileEntityMobFarm));
@@ -24,11 +29,29 @@ public class GuiMobFarm extends GuiContainer {
 	}
 	
 	@Override
+	public void initGui() {
+		super.initGui();
+		this.collectExperienceButton = new GuiButton(0, this.guiLeft + 2, this.guiTop + 64, 172, 18, "");
+		this.buttonList.add(this.collectExperienceButton);
+	}
+
+	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		if (this.collectExperienceButton != null) {
+			this.collectExperienceButton.enabled = this.tileEntityMobFarm.getStoredExperience() > 0;
+			this.collectExperienceButton.displayString = I18n.format("tinymobfarm.gui.collect_experience");
+		}
 		this.drawDefaultBackground();
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		this.renderHoveredToolTip(mouseX, mouseY);
 		this.drawTip(mouseX, mouseY);
+	}
+
+	@Override
+	protected void actionPerformed(GuiButton button) {
+		if (button.id == 0 && button.enabled) {
+			TinyMobFarm.NETWORK.sendToServer(new CollectExperienceMessage(this.tileEntityMobFarm.getPos()));
+		}
 	}
 
 	@Override
@@ -42,6 +65,8 @@ public class GuiMobFarm extends GuiContainer {
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		String name = I18n.format(this.tileEntityMobFarm.getTranslationKey());
 		this.fontRenderer.drawString(name, (this.xSize - this.fontRenderer.getStringWidth(name)) / 2, 8, 4210752);
+		String experience = I18n.format("tinymobfarm.gui.experience_storage", this.tileEntityMobFarm.getStoredExperience(), Math.max(0, ConfigTinyMobFarm.MAX_STORED_EXPERIENCE));
+		this.fontRenderer.drawString(experience, (this.xSize - this.fontRenderer.getStringWidth(experience)) / 2, 48, 4210752);
 		
 		if (this.tileEntityMobFarm.isWorking()) {
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);

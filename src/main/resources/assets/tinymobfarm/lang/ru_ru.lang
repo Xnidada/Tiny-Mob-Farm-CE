@@ -29,6 +29,8 @@ tinymobfarm.error.health_too_high=Текущее здоровье моба до�
 tinymobfarm.gui.higher_tier=Этому существу нужен более высокий уровень фермы.
 tinymobfarm.gui.redstone_disable=Отключено сигналом редстоуна.
 tinymobfarm.gui.no_lasso=Разместите лассо, чтобы активировать
+tinymobfarm.gui.collect_experience=Собрать опыт
+tinymobfarm.gui.experience_storage=Опыт: %d/%d
 
 tinymobfarm.tooltip.mob_name=Моб: %s
 tinymobfarm.tooltip.health=Здоровье: %d/%d

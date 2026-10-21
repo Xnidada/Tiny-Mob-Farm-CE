@@ -43,6 +43,11 @@ public class ConfigTinyMobFarm {
 	@Comment({"每个等级农场生成一次掉落所需的秒数。", "Seconds required for each farm tier to generate loot once."})
 	public static double[] MOB_FARM_SPEED = {50.0, 40.0, 30.0, 20.0, 10.0, 5.0, 2.5, 0.5};
 
+	@Name("Maximum Stored Experience")
+	@Comment({"每个刷怪场最多存储的经验值。超出上限的经验会直接丢弃。默认 1000。", "Maximum experience stored by each mob farm. Experience above this limit is discarded. Default: 1000."})
+	@RangeInt(min = 0, max = Integer.MAX_VALUE)
+	public static int MAX_STORED_EXPERIENCE = 1000;
+
 	@Comment({"是否在客户端渲染农场内部的生物模型；当视野内有大量农场时可关闭以提升帧率。", "Whether to render captured mob models inside mob farms on the client; disable this to improve FPS when many farms are visible."})
 	@Name("Render Farm Mob Model")
 	public static boolean RENDER_FARM_MOB_MODEL = true;

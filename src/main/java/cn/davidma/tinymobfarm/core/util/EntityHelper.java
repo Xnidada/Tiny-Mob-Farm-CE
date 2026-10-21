@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import cn.davidma.tinymobfarm.core.ConfigTinyMobFarm;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -19,6 +20,7 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 public class EntityHelper {
 	
 	private static Method getLootTable;
+	private static Method getExperiencePoints;
 
 	public static String getRegistryName(EntityLiving entityLiving) {
 		return EntityRegistry.getEntry(entityLiving.getClass()).getRegistryName().toString();
@@ -59,5 +61,18 @@ public class EntityHelper {
 		FakePlayer daniel = FakePlayerHelper.getPlayer((WorldServer) world);
 		builder.withPlayer(daniel);
 		return lootTable.generateLootForPools(world.rand, builder.build());
+	}
+
+	public static int getExperiencePoints(EntityLiving entityLiving, EntityPlayer player) {
+		try {
+			if (getExperiencePoints == null) {
+				getExperiencePoints = ReflectionHelper.findMethod(EntityLiving.class, "getExperiencePoints", "func_70693_a", EntityPlayer.class);
+			}
+			Object experience = getExperiencePoints.invoke(entityLiving, player);
+			return experience instanceof Integer ? Math.max(0, (Integer) experience) : 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
 	}
 }

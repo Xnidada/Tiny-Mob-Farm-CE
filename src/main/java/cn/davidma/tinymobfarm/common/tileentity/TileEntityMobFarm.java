@@ -11,6 +11,7 @@ import cn.davidma.tinymobfarm.core.EnumMobFarm;
 import cn.davidma.tinymobfarm.core.Reference;
 import cn.davidma.tinymobfarm.core.drop.MobFarmDropManager;
 import cn.davidma.tinymobfarm.core.drop.MobFarmDropManager.DropSource;
+import cn.davidma.tinymobfarm.core.util.EntityHelper;
 import cn.davidma.tinymobfarm.core.util.FakePlayerHelper;
 import cn.davidma.tinymobfarm.core.util.NBTHelper;
 
@@ -40,6 +41,7 @@ public class TileEntityMobFarm extends TileEntity implements ITickable {
 	private static final String PENDING_DROPS = "PendingDrops";
 	private List<ItemStack> pendingDrops = new ArrayList<ItemStack>();
 	private int outputRetryCooldown;
+	private int storedExperience;
 	private DropSource cachedDropSource;
 	private int cachedDropSourceVersion = -1;
 	private final ItemStackHandler inventory = new ItemStackHandler(1) {
@@ -110,6 +112,7 @@ public class TileEntityMobFarm extends TileEntity implements ITickable {
 					this.outputRetryCooldown = 0;
 					
 					FakePlayer daniel = FakePlayerHelper.getPlayer((WorldServer) world);
+					this.addMobExperience(daniel);
 					this.getLasso().damageItem(this.mobFarmData.getRandomDamage(this.world.rand), daniel);
 					
 					this.saveAndSync();
@@ -328,6 +331,36 @@ public class TileEntityMobFarm extends TileEntity implements ITickable {
 		return this.inventory.getStackInSlot(0);
 	}
 
+	private void addMobExperience(FakePlayer player) {
+		int capacity = Math.max(0, ConfigTinyMobFarm.MAX_STORED_EXPERIENCE);
+		if (capacity <= 0 || this.storedExperience >= capacity || this.getLasso().isEmpty()) {
+			this.storedExperience = Math.min(this.storedExperience, capacity);
+			return;
+		}
+
+		NBTTagCompound mobData = NBTHelper.getBaseTag(this.getLasso()).getCompoundTag(NBTHelper.MOB_DATA);
+		Entity entity = EntityList.createEntityFromNBT(mobData, this.world);
+		if (!(entity instanceof EntityLiving)) return;
+
+		int experience = EntityHelper.getExperiencePoints((EntityLiving) entity, player);
+		this.storedExperience = Math.min(capacity, this.storedExperience + experience);
+	}
+
+	public int getStoredExperience() {
+		return Math.min(Math.max(0, this.storedExperience), Math.max(0, ConfigTinyMobFarm.MAX_STORED_EXPERIENCE));
+	}
+
+	public void collectExperience(net.minecraft.entity.player.EntityPlayer player) {
+		if (this.world == null || this.world.isRemote || player == null) return;
+
+		int experience = this.getStoredExperience();
+		if (experience <= 0) return;
+
+		this.storedExperience = 0;
+		player.addExperience(experience);
+		this.saveAndSync();
+	}
+
 	public void setLasso(ItemStack lasso) {
 		this.inventory.setStackInSlot(0, lasso);
 	}
@@ -387,6 +420,7 @@ public class TileEntityMobFarm extends TileEntity implements ITickable {
 		super.readFromNBT(nbt);
 		this.mobFarmData = EnumMobFarm.values()[nbt.getInteger(NBTHelper.MOB_FARM_DATA)];
 		this.currProgress = nbt.getInteger(NBTHelper.CURR_PROGRESS);
+		this.storedExperience = nbt.getInteger(NBTHelper.STORED_EXPERIENCE);
 		this.mechanical = nbt.getBoolean("Mechanical");
 		this.inventory.deserializeNBT(nbt.getCompoundTag(NBTHelper.INVENTORY));
 		this.pendingDrops = this.readDropsFromNBT(nbt.getTagList(PENDING_DROPS, 10));
@@ -399,6 +433,7 @@ public class TileEntityMobFarm extends TileEntity implements ITickable {
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		if (this.mobFarmData != null) nbt.setInteger(NBTHelper.MOB_FARM_DATA, this.mobFarmData.ordinal());
 		nbt.setInteger(NBTHelper.CURR_PROGRESS, this.currProgress);
+		nbt.setInteger(NBTHelper.STORED_EXPERIENCE, this.getStoredExperience());
 		nbt.setBoolean("Mechanical", this.mechanical);
 		nbt.setTag(NBTHelper.INVENTORY, this.inventory.serializeNBT());
 		if (!this.pendingDrops.isEmpty()) {

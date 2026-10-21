@@ -20,6 +20,8 @@ tinymobfarm.error.health_too_high=This mob's current health must be reduced to %
 tinymobfarm.gui.higher_tier=This mob needs higher farm tiers.
 tinymobfarm.gui.redstone_disable=Disabled by redstone.
 tinymobfarm.gui.no_lasso=Insert a lasso to activate.
+tinymobfarm.gui.collect_experience=Collect Experience
+tinymobfarm.gui.experience_storage=Experience: %d/%d
 
 tinymobfarm.tooltip.mob_name=Mob: %s
 tinymobfarm.tooltip.health=Health: %d/%d

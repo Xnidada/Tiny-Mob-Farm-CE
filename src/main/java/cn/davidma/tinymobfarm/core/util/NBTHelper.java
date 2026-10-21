@@ -19,6 +19,7 @@ public class NBTHelper {
 	// Tile entity.
 	public static final String MOB_FARM_DATA = "mobFarmData";
 	public static final String CURR_PROGRESS = "currProgress";
+	public static final String STORED_EXPERIENCE = "storedExperience";
 	public static final String INVENTORY = "inventory";
 	
 	public static NBTTagCompound getBaseTag(ItemStack stack) {
