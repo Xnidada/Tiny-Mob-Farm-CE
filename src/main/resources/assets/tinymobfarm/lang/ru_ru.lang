@@ -40,6 +40,7 @@ tinymobfarm.tooltip.mechanical=Механическая версия: подде
 
 tinymobfarm.tooltip.hold_shift=Удерживайте %s<SHIFT>%s для получения информации
 tinymobfarm.tooltip.farm_rate=Создаёт лут и опыт каждые %s секунд
+tinymobfarm.tooltip.farm_rate_experience=Создаёт лут и опыт каждые %s секунд
 tinymobfarm.tooltip.durability_info=повреждение лассо:
 tinymobfarm.tooltip.no_hostile=Не может фармить враждебных мобов
 tinymobfarm.tooltip.no_durability=- %d%% шанс не потерять прочность

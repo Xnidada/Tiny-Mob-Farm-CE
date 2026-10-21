@@ -86,7 +86,7 @@ public enum EnumMobFarm {
 		if (!this.canFarmHostile) {
 			tooltip.add(TextFormatting.RED + I18n.format("tinymobfarm.tooltip.no_hostile"));
 		}
-		tooltip.add(I18n.format("tinymobfarm.tooltip.farm_rate", ConfigTinyMobFarm.MOB_FARM_SPEED[this.ordinal()]));
+		tooltip.add(I18n.format("tinymobfarm.tooltip.farm_rate_experience", ConfigTinyMobFarm.MOB_FARM_SPEED[this.ordinal()]));
 		tooltip.add(I18n.format("tinymobfarm.tooltip.durability_info"));
 		Map<Integer, Integer> damageChance = this.getDamageChance();
 		int totalChance = this.getTotalChance(damageChance);
