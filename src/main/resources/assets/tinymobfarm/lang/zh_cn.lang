@@ -38,7 +38,7 @@ tinymobfarm.tooltip.hostile=该生物为敌对生物。
 tinymobfarm.tooltip.capture=对生物右键以捕捉。
 
 tinymobfarm.tooltip.hold_shift=按住 %s<SHIFT>%s 查看详情。
-tinymobfarm.tooltip.farm_rate=每 %d 秒生成一次掉落物与经验。
+tinymobfarm.tooltip.farm_rate=每%s秒生成一次掉落物与经验。
 tinymobfarm.tooltip.durability_info=套索耐久损耗：
 tinymobfarm.tooltip.no_hostile=无法刷敌对生物。
 tinymobfarm.tooltip.no_durability=- %d%% 概率不损失耐久

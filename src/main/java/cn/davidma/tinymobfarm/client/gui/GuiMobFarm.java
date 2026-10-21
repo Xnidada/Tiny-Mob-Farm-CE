@@ -31,7 +31,7 @@ public class GuiMobFarm extends GuiContainer {
 	@Override
 	public void initGui() {
 		super.initGui();
-		this.collectExperienceButton = new GuiButton(0, this.guiLeft + 43, this.guiTop + 64, 90, 18, "");
+		this.collectExperienceButton = new GuiButton(0, this.guiLeft + 101, this.guiTop + 24, 72, 20, "");
 		this.buttonList.add(this.collectExperienceButton);
 	}
 

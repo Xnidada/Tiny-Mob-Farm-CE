@@ -39,7 +39,7 @@ tinymobfarm.tooltip.capture=Щелкните ПКМ на моба, чтобы п
 tinymobfarm.tooltip.mechanical=Механическая версия: поддерживает ввод/вывод через трубы для слота с лассо.
 
 tinymobfarm.tooltip.hold_shift=Удерживайте %s<SHIFT>%s для получения информации
-tinymobfarm.tooltip.farm_rate=Создаёт лут и опыт каждые %d секунд
+tinymobfarm.tooltip.farm_rate=Создаёт лут и опыт каждые %s секунд
 tinymobfarm.tooltip.durability_info=повреждение лассо:
 tinymobfarm.tooltip.no_hostile=Не может фармить враждебных мобов
 tinymobfarm.tooltip.no_durability=- %d%% шанс не потерять прочность
