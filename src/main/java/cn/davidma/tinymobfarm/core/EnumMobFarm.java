@@ -68,6 +68,14 @@ public enum EnumMobFarm {
 	public int getMaxProgress() {
 		return (int) (ConfigTinyMobFarm.MOB_FARM_SPEED[this.ordinal()] * 20);
 	}
+
+	public int getMaxStoredExperience() {
+		int capacity = ConfigTinyMobFarm.MAX_STORED_EXPERIENCE;
+		if (this.ordinal() < ConfigTinyMobFarm.MAX_STORED_EXPERIENCE_BY_TIER.length) {
+			capacity = ConfigTinyMobFarm.MAX_STORED_EXPERIENCE_BY_TIER[this.ordinal()];
+		}
+		return Math.max(0, capacity);
+	}
 	
 	public int getRandomDamage(Random rand) {
 		Map<Integer, Integer> damageChance = this.getDamageChance();
@@ -87,6 +95,7 @@ public enum EnumMobFarm {
 			tooltip.add(TextFormatting.RED + I18n.format("tinymobfarm.tooltip.no_hostile"));
 		}
 		tooltip.add(I18n.format("tinymobfarm.tooltip.farm_rate_experience", ConfigTinyMobFarm.MOB_FARM_SPEED[this.ordinal()]));
+		tooltip.add(I18n.format("tinymobfarm.tooltip.experience_capacity", this.getMaxStoredExperience()));
 		tooltip.add(I18n.format("tinymobfarm.tooltip.durability_info"));
 		Map<Integer, Integer> damageChance = this.getDamageChance();
 		int totalChance = this.getTotalChance(damageChance);
