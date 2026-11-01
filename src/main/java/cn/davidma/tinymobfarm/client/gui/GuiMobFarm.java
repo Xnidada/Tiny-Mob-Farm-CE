@@ -65,7 +65,7 @@ public class GuiMobFarm extends GuiContainer {
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		String name = I18n.format(this.tileEntityMobFarm.getTranslationKey());
 		this.fontRenderer.drawString(name, (this.xSize - this.fontRenderer.getStringWidth(name)) / 2, 8, 4210752);
-		String experience = I18n.format("tinymobfarm.gui.experience_storage", this.tileEntityMobFarm.getStoredExperience(), Math.max(0, ConfigTinyMobFarm.MAX_STORED_EXPERIENCE));
+		String experience = I18n.format("tinymobfarm.gui.experience_storage", this.tileEntityMobFarm.getStoredExperience(), this.tileEntityMobFarm.getExperienceCapacityForDisplay());
 		this.fontRenderer.drawString(experience, (this.xSize - this.fontRenderer.getStringWidth(experience)) / 2, 48, 4210752);
 		
 		if (this.tileEntityMobFarm.isWorking()) {

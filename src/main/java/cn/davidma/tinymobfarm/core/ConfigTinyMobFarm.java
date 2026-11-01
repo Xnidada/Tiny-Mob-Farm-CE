@@ -4,6 +4,7 @@ import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.Comment;
 import net.minecraftforge.common.config.Config.Name;
 import net.minecraftforge.common.config.Config.RangeInt;
+import net.minecraftforge.common.config.Config.RangeDouble;
 import net.minecraftforge.common.config.Config.Type;
 import net.minecraftforge.common.config.ConfigManager;
 
@@ -44,9 +45,18 @@ public class ConfigTinyMobFarm {
 	public static double[] MOB_FARM_SPEED = {50.0, 40.0, 30.0, 20.0, 10.0, 5.0, 2.5, 0.5};
 
 	@Name("Maximum Stored Experience")
-	@Comment({"每个刷怪场最多存储的经验值。超出上限的经验会直接丢弃。默认 1000。", "Maximum experience stored by each mob farm. Experience above this limit is discarded. Default: 1000."})
+	@Comment({"旧版统一经验上限，作为等级数组缺少对应项时的备用值。", "Legacy global experience limit used when the per-tier array has no matching entry."})
 	@RangeInt(min = 0, max = Integer.MAX_VALUE)
 	public static int MAX_STORED_EXPERIENCE = 1000;
+
+	@Name("Maximum Stored Experience By Tier")
+	@Comment({"各等级刷怪场最多存储的经验值，顺序为木、石、铁、金、钻石、绿宝石、炼狱、终极；超出上限的经验会直接丢弃。默认各等级均为 1000。", "Maximum experience stored by each farm tier, ordered as wood, stone, iron, gold, diamond, emerald, infernal, and ultimate; experience above the limit is discarded. Default: 1000 for every tier."})
+	public static int[] MAX_STORED_EXPERIENCE_BY_TIER = {1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000};
+
+	@Name("Special Shard Drop Chance Percent")
+	@Comment({"神秘工匠末影碎片和下界碎片的额外掉落概率，单位为百分比。默认 0.95%。", "Additional drop chance for Thaumic Tinkerer end and nether shards, as a percentage. Default: 0.95%."})
+	@RangeDouble(min = 0.0D, max = 100.0D)
+	public static double SPECIAL_SHARD_DROP_CHANCE_PERCENT = 0.95D;
 
 	@Comment({"是否在客户端渲染农场内部的生物模型；当视野内有大量农场时可关闭以提升帧率。", "Whether to render captured mob models inside mob farms on the client; disable this to improve FPS when many farms are visible."})
 	@Name("Render Farm Mob Model")

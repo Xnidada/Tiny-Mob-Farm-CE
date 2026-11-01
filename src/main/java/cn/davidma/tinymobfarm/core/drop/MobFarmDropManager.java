@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import cn.davidma.tinymobfarm.core.ConfigTinyMobFarm;
 import cn.davidma.tinymobfarm.core.util.EntityHelper;
 import cn.davidma.tinymobfarm.core.util.NBTHelper;
 
@@ -18,7 +19,6 @@ public class MobFarmDropManager {
 	private static final List<MobFarmDropRule> CUSTOM_RULES = new ArrayList<MobFarmDropRule>();
 	private static final String THAUMIC_TINKERER_MOD_ID = "thaumictinkerer";
 	private static final ResourceLocation THAUMIC_TINKERER_RESOURCE = new ResourceLocation(THAUMIC_TINKERER_MOD_ID, "kamiresource");
-	private static final double SPECIAL_SHARD_DROP_CHANCE = 0.0095D;
 
 	public static void addRule(MobFarmDropRule rule) {
 		if (rule != null) {
@@ -163,8 +163,9 @@ public class MobFarmDropManager {
 		@Override
 		public List<ItemStack> generateDrops(World world) {
 			List<ItemStack> drops = this.delegate.generateDrops(world);
+			double chance = Math.max(0.0D, Math.min(100.0D, ConfigTinyMobFarm.SPECIAL_SHARD_DROP_CHANCE_PERCENT)) / 100.0D;
 			if (Loader.isModLoaded(THAUMIC_TINKERER_MOD_ID)
-					&& world.rand.nextDouble() <= SPECIAL_SHARD_DROP_CHANCE) {
+					&& world.rand.nextDouble() <= chance) {
 				net.minecraft.item.Item resource = net.minecraft.item.Item.REGISTRY.getObject(THAUMIC_TINKERER_RESOURCE);
 				if (resource != null) {
 					drops.add(new ItemStack(resource, 1, this.metadata));
