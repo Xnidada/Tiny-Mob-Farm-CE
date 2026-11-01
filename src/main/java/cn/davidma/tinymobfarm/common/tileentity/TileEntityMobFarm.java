@@ -351,7 +351,7 @@ public class TileEntityMobFarm extends TileEntity implements ITickable {
 	}
 
 	public int getExperienceCapacityForDisplay() {
-		return this.mobFarmData == null ? Math.max(0, ConfigTinyMobFarm.MAX_STORED_EXPERIENCE) : this.mobFarmData.getMaxStoredExperience();
+		return this.mobFarmData == null ? 0 : this.mobFarmData.getMaxStoredExperience();
 	}
 
 	public void collectExperience(net.minecraft.entity.player.EntityPlayer player) {

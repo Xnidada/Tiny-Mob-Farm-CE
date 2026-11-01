@@ -44,11 +44,6 @@ public class ConfigTinyMobFarm {
 	@Comment({"每个等级农场生成一次掉落所需的秒数。", "Seconds required for each farm tier to generate loot once."})
 	public static double[] MOB_FARM_SPEED = {50.0, 40.0, 30.0, 20.0, 10.0, 5.0, 2.5, 0.5};
 
-	@Name("Maximum Stored Experience")
-	@Comment({"旧版统一经验上限，作为等级数组缺少对应项时的备用值。", "Legacy global experience limit used when the per-tier array has no matching entry."})
-	@RangeInt(min = 0, max = Integer.MAX_VALUE)
-	public static int MAX_STORED_EXPERIENCE = 1000;
-
 	@Name("Maximum Stored Experience By Tier")
 	@Comment({"各等级刷怪场最多存储的经验值，顺序为木、石、铁、金、钻石、绿宝石、炼狱、终极；超出上限的经验会直接丢弃。默认各等级均为 1000。", "Maximum experience stored by each farm tier, ordered as wood, stone, iron, gold, diamond, emerald, infernal, and ultimate; experience above the limit is discarded. Default: 1000 for every tier."})
 	public static int[] MAX_STORED_EXPERIENCE_BY_TIER = {1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000};

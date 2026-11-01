@@ -70,11 +70,8 @@ public enum EnumMobFarm {
 	}
 
 	public int getMaxStoredExperience() {
-		int capacity = ConfigTinyMobFarm.MAX_STORED_EXPERIENCE;
-		if (this.ordinal() < ConfigTinyMobFarm.MAX_STORED_EXPERIENCE_BY_TIER.length) {
-			capacity = ConfigTinyMobFarm.MAX_STORED_EXPERIENCE_BY_TIER[this.ordinal()];
-		}
-		return Math.max(0, capacity);
+		if (this.ordinal() >= ConfigTinyMobFarm.MAX_STORED_EXPERIENCE_BY_TIER.length) return 0;
+		return Math.max(0, ConfigTinyMobFarm.MAX_STORED_EXPERIENCE_BY_TIER[this.ordinal()]);
 	}
 	
 	public int getRandomDamage(Random rand) {
