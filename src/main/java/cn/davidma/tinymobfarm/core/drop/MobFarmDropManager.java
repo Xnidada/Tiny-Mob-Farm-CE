@@ -18,7 +18,7 @@ public class MobFarmDropManager {
 	private static final List<MobFarmDropRule> CUSTOM_RULES = new ArrayList<MobFarmDropRule>();
 	private static final String THAUMIC_TINKERER_MOD_ID = "thaumictinkerer";
 	private static final ResourceLocation THAUMIC_TINKERER_RESOURCE = new ResourceLocation(THAUMIC_TINKERER_MOD_ID, "kamiresource");
-	private static final double SPECIAL_SHARD_DROP_CHANCE = 0.02D;
+	private static final double SPECIAL_SHARD_DROP_CHANCE = 0.0095D;
 
 	public static void addRule(MobFarmDropRule rule) {
 		if (rule != null) {
