@@ -11,10 +11,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Loader;
 
 public class MobFarmDropManager {
 
 	private static final List<MobFarmDropRule> CUSTOM_RULES = new ArrayList<MobFarmDropRule>();
+	private static final String THAUMIC_TINKERER_MOD_ID = "thaumictinkerer";
+	private static final ResourceLocation THAUMIC_TINKERER_RESOURCE = new ResourceLocation(THAUMIC_TINKERER_MOD_ID, "kamiresource");
+	private static final double SPECIAL_SHARD_DROP_CHANCE = 0.02D;
 
 	public static void addRule(MobFarmDropRule rule) {
 		if (rule != null) {
@@ -53,13 +57,23 @@ public class MobFarmDropManager {
 		NBTTagCompound mobTag = NBTHelper.getBaseTag(lasso);
 		String mobRegistryName = getMobRegistryName(mobTag);
 		List<MobFarmDropRule> customRules = getCustomRules(mobRegistryName);
+		DropSource dropSource;
 		if (!customRules.isEmpty()) {
-			return new CustomDropSource(customRules);
+			dropSource = new CustomDropSource(customRules);
+		} else {
+			String lootTableLocation = mobTag.getString(NBTHelper.MOB_LOOTTABLE_LOCATION);
+			dropSource = lootTableLocation.isEmpty()
+					? EmptyDropSource.INSTANCE
+					: new LootTableDropSource(new ResourceLocation(lootTableLocation));
 		}
 
-		String lootTableLocation = mobTag.getString(NBTHelper.MOB_LOOTTABLE_LOCATION);
-		if (lootTableLocation.isEmpty()) return EmptyDropSource.INSTANCE;
-		return new LootTableDropSource(new ResourceLocation(lootTableLocation));
+		if ("minecraft:enderman".equals(mobRegistryName)) {
+			return new SpecialShardDropSource(dropSource, 0);
+		}
+		if ("minecraft:zombie_pigman".equals(mobRegistryName)) {
+			return new SpecialShardDropSource(dropSource, 1);
+		}
+		return dropSource;
 	}
 
 	public static int getDropSourceVersion() {
@@ -134,6 +148,29 @@ public class MobFarmDropManager {
 		@Override
 		public List<ItemStack> generateDrops(World world) {
 			return copyDrops(EntityHelper.generateLoot(this.lootTableLocation, world));
+		}
+	}
+
+	private static class SpecialShardDropSource implements DropSource {
+		private final DropSource delegate;
+		private final int metadata;
+
+		private SpecialShardDropSource(DropSource delegate, int metadata) {
+			this.delegate = delegate;
+			this.metadata = metadata;
+		}
+
+		@Override
+		public List<ItemStack> generateDrops(World world) {
+			List<ItemStack> drops = this.delegate.generateDrops(world);
+			if (Loader.isModLoaded(THAUMIC_TINKERER_MOD_ID)
+					&& world.rand.nextDouble() <= SPECIAL_SHARD_DROP_CHANCE) {
+				net.minecraft.item.Item resource = net.minecraft.item.Item.REGISTRY.getObject(THAUMIC_TINKERER_RESOURCE);
+				if (resource != null) {
+					drops.add(new ItemStack(resource, 1, this.metadata));
+				}
+			}
+			return drops;
 		}
 	}
 
