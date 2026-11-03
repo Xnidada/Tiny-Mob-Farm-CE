@@ -6,7 +6,6 @@ import cn.davidma.tinymobfarm.common.TinyMobFarm;
 import cn.davidma.tinymobfarm.core.ConfigTinyMobFarm;
 import cn.davidma.tinymobfarm.core.Reference;
 import cn.davidma.tinymobfarm.core.util.EntityHelper;
-import cn.davidma.tinymobfarm.core.util.Msg;
 import cn.davidma.tinymobfarm.core.util.NBTHelper;
 
 import net.minecraft.client.resources.I18n;
@@ -46,31 +45,19 @@ public class ItemLasso extends Item {
 		
 		// Cannot capture boss.
 		if (!target.isNonBoss()) {
-			if (!player.world.isRemote) {
-				Msg.tellPlayer(player, "tinymobfarm.error.cannot_capture_boss");
-			}
 			return true;
 		}
 		
 		// Blacklist.
 		if (EntityHelper.isMobBlacklisted((EntityLiving) target)) {
-			if (!player.world.isRemote) {
-				Msg.tellPlayer(player, "tinymobfarm.error.blacklisted_mob");
-			}
 			return true;
 		}
 
 		// Health limits.
 		if (target.getMaxHealth() >= ConfigTinyMobFarm.LASSO_MAX_MOB_HEALTH) {
-			if (!player.world.isRemote) {
-				Msg.tellPlayer(player, "tinymobfarm.error.max_health_too_high", ConfigTinyMobFarm.LASSO_MAX_MOB_HEALTH);
-			}
 			return true;
 		}
 		if (target.getHealth() > ConfigTinyMobFarm.LASSO_CAPTURE_HEALTH_LIMIT) {
-			if (!player.world.isRemote) {
-				Msg.tellPlayer(player, "tinymobfarm.error.health_too_high", ConfigTinyMobFarm.LASSO_CAPTURE_HEALTH_LIMIT);
-			}
 			return true;
 		}
 		
