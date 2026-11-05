@@ -1,5 +1,7 @@
 package cn.davidma.tinymobfarm.core.drop;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -8,6 +10,8 @@ import cn.davidma.tinymobfarm.core.ConfigTinyMobFarm;
 import cn.davidma.tinymobfarm.core.util.EntityHelper;
 import cn.davidma.tinymobfarm.core.util.NBTHelper;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -18,7 +22,10 @@ public class MobFarmDropManager {
 
 	private static final List<MobFarmDropRule> CUSTOM_RULES = new ArrayList<MobFarmDropRule>();
 	private static final String THAUMIC_TINKERER_MOD_ID = "thaumictinkerer";
+	private static final String DRACONIC_EVOLUTION_MOD_ID = "draconicevolution";
 	private static final ResourceLocation THAUMIC_TINKERER_RESOURCE = new ResourceLocation(THAUMIC_TINKERER_MOD_ID, "kamiresource");
+	private static Method getSoulFromEntity;
+	private static Object mobSoul;
 
 	public static void addRule(MobFarmDropRule rule) {
 		if (rule != null) {
@@ -68,12 +75,12 @@ public class MobFarmDropManager {
 		}
 
 		if ("minecraft:enderman".equals(mobRegistryName)) {
-			return new SpecialShardDropSource(dropSource, 0);
+			dropSource = new SpecialShardDropSource(dropSource, 0);
 		}
 		if ("minecraft:zombie_pigman".equals(mobRegistryName)) {
-			return new SpecialShardDropSource(dropSource, 1);
+			dropSource = new SpecialShardDropSource(dropSource, 1);
 		}
-		return dropSource;
+		return new MobSoulDropSource(dropSource, mobTag.getCompoundTag(NBTHelper.MOB_DATA));
 	}
 
 	public static int getDropSourceVersion() {
@@ -170,6 +177,40 @@ public class MobFarmDropManager {
 				if (resource != null) {
 					drops.add(new ItemStack(resource, 1, this.metadata));
 				}
+			}
+			return drops;
+		}
+	}
+
+	private static class MobSoulDropSource implements DropSource {
+		private final DropSource delegate;
+		private final NBTTagCompound mobData;
+
+		private MobSoulDropSource(DropSource delegate, NBTTagCompound mobData) {
+			this.delegate = delegate;
+			this.mobData = mobData.copy();
+		}
+
+		@Override
+		public List<ItemStack> generateDrops(World world) {
+			List<ItemStack> drops = this.delegate.generateDrops(world);
+			double chance = Math.max(0.0D, Math.min(100.0D, ConfigTinyMobFarm.MOB_SOUL_DROP_CHANCE_PERCENT)) / 100.0D;
+			if (!Loader.isModLoaded(DRACONIC_EVOLUTION_MOD_ID) || world.rand.nextDouble() > chance) return drops;
+
+			try {
+				if (getSoulFromEntity == null) {
+					Class<?> mobSoulClass = Class.forName("com.brandon3055.draconicevolution.items.MobSoul");
+					Field mobSoulField = mobSoulClass.getField("mobSoul");
+					mobSoul = mobSoulField.get(null);
+					getSoulFromEntity = mobSoulClass.getMethod("getSoulFromEntity", Entity.class, boolean.class);
+				}
+				Entity entity = EntityList.createEntityFromNBT(this.mobData, world);
+				if (entity != null) {
+					ItemStack soul = (ItemStack) getSoulFromEntity.invoke(mobSoul, entity, true);
+					if (soul != null && !soul.isEmpty()) drops.add(soul);
+				}
+			} catch (Exception ignored) {
+				// Optional compatibility: keep normal farm drops when Draconic Evolution changes its API.
 			}
 			return drops;
 		}

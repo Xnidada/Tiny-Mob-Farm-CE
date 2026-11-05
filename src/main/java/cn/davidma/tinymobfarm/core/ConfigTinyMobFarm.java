@@ -49,9 +49,14 @@ public class ConfigTinyMobFarm {
 	public static int[] MAX_STORED_EXPERIENCE_BY_TIER = {1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000};
 
 	@Name("Special Shard Drop Chance Percent")
-	@Comment({"神秘工匠末影碎片和下界碎片的额外掉落概率，单位为百分比。默认 0.95%。", "Additional drop chance for Thaumic Tinkerer end and nether shards, as a percentage. Default: 0.95%."})
+	@Comment({"神秘工匠末影碎片和下界碎片的掉落概率，单位为百分比。默认 0.95%。", "Drop chance for Thaumic Tinkerer end and nether shards, as a percentage. Default: 0.95%."})
 	@RangeDouble(min = 0.0D, max = 100.0D)
 	public static double SPECIAL_SHARD_DROP_CHANCE_PERCENT = 0.95D;
+
+	@Name("Mob Soul Drop Chance Percent")
+	@Comment({"龙之研究生物灵魂的掉落概率，单位为百分比，支持小数点后 8 位。默认 0.0005%。", "Draconic Evolution mob soul drop chance, as a percentage, with up to 8 decimal places. Default: 0.0005%."})
+	@RangeDouble(min = 0.0D, max = 100.0D)
+	public static double MOB_SOUL_DROP_CHANCE_PERCENT = 0.0005D;
 
 	@Comment({"是否在客户端渲染农场内部的生物模型；当视野内有大量农场时可关闭以提升帧率。", "Whether to render captured mob models inside mob farms on the client; disable this to improve FPS when many farms are visible."})
 	@Name("Render Farm Mob Model")
