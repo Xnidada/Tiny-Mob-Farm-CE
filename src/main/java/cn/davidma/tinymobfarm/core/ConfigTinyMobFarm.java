@@ -49,7 +49,7 @@ public class ConfigTinyMobFarm {
 	public static int[] MAX_STORED_EXPERIENCE_BY_TIER = {1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000};
 
 	@Name("Special Shard Drop Chance Percent")
-	@Comment({"神秘工匠末影碎片和下界碎片的掉落概率，单位为百分比。默认 0.95%。", "Drop chance for Thaumic Tinkerer end and nether shards, as a percentage. Default: 0.95%."})
+	@Comment({"神秘工匠末影碎片和下界碎片的掉落概率，单位为百分比，支持小数点后 8 位。默认 0.95%。", "Drop chance for Thaumic Tinkerer end and nether shards, as a percentage, with up to 8 decimal places. Default: 0.95%."})
 	@RangeDouble(min = 0.0D, max = 100.0D)
 	public static double SPECIAL_SHARD_DROP_CHANCE_PERCENT = 0.95D;
 
